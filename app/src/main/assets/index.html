@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portofolio Saya</title>
+<meta name="theme-color" content="#1F5C55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Portofolio">
+<link rel="manifest" href="manifest.json">
+<style>
+  :root {
+    --ink: #1B2A2A;
+    --ink-soft: #4A5C5A;
+    --ink-faint: #7C8C89;
+    --paper: #F1ECDE;
+    --paper-raised: #FBF8EF;
+    --line: #D8D0BC;
+    --teal: #1F5C55;
+    --teal-soft: #E3EEE9;
+    --gain: #2F6B4F;
+    --gain-bg: #E5F0E7;
+    --loss: #9A3B2E;
+    --loss-bg: #F5E7E2;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #EDEAE0;
+      --ink-soft: #B9C4C1;
+      --ink-faint: #85918E;
+      --paper: #14201F;
+      --paper-raised: #1B2928;
+      --line: #2C3B39;
+      --teal: #5CB8AA;
+      --teal-soft: #1E332F;
+      --gain: #6FBF95;
+      --gain-bg: #1D2E24;
+      --loss: #E08874;
+      --loss-bg: #322019;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #EDEAE0;
+    --ink-soft: #B9C4C1;
+    --ink-faint: #85918E;
+    --paper: #14201F;
+    --paper-raised: #1B2928;
+    --line: #2C3B39;
+    --teal: #5CB8AA;
+    --teal-soft: #1E332F;
+    --gain: #6FBF95;
+    --gain-bg: #1D2E24;
+    --loss: #E08874;
+    --loss-bg: #322019;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
+  * { box-sizing: border-box; }
+  body {
+    height: 100%;
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Iowan Old Style', 'Georgia', 'Source Serif Pro', serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app { max-width: 480px; margin: 0 auto; padding: 20px 16px 48px; }
+
+  .masthead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-bottom: 10px; border-bottom: 2px solid var(--ink);
+    margin-bottom: 18px;
+  }
+  .masthead h1 {
+    font-size: 21px; font-weight: 600; margin: 0; letter-spacing: 0.2px;
+  }
+  .masthead .stamp {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 11px; color: var(--ink-faint);
+  }
+
+  .totals {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    margin-bottom: 16px;
+  }
+  .totals .row1 { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
+  .totals .label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px; color: var(--ink-soft);
+  }
+  .totals .value {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px; font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .pl-big {
+    font-size: 32px; font-weight: 700; line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .pl-pct {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px; font-weight: 600; margin-left: 8px;
+  }
+  .gain-text { color: var(--gain); }
+  .loss-text { color: var(--loss); }
+
+  .allocation {
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .alloc-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; color: var(--ink-soft); }
+  .alloc-row span:last-child { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 500; }
+
+  .section-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin: 22px 0 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .section-head h2 {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
+    color: var(--teal); margin: 0;
+  }
+  .section-head .sub { font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  .holding {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+    margin-bottom: 12px;
+  }
+  .holding-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+  .ticker-input {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 0.3px;
+    border: none; background: transparent; color: var(--ink);
+    width: 100%; padding: 4px 0;
+  }
+  .ticker-input:focus { outline: none; border-bottom: 1px solid var(--teal); }
+  .cat-select {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 11px; color: var(--teal); background: var(--teal-soft);
+    border: none; border-radius: 6px; padding: 5px 6px;
+    flex-shrink: 0;
+  }
+  .del-btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    border: none; background: transparent; color: var(--ink-faint);
+    font-size: 12px; padding: 4px 6px; cursor: pointer; border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .del-btn:active { background: var(--loss-bg); color: var(--loss); }
+
+  .field-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .field label {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 10.5px; color: var(--ink-faint); margin-bottom: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .field input {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 7px 8px;
+  }
+  .field input:focus {
+    outline: none; border-color: var(--teal);
+  }
+
+  .holding-result {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--line); padding-top: 9px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .holding-result .nilai { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .holding-result .pl {
+    font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums;
+    padding: 3px 9px; border-radius: 20px;
+  }
+  .pl.gain { color: var(--gain); background: var(--gain-bg); }
+  .pl.loss { color: var(--loss); background: var(--loss-bg); }
+  .pl.flat { color: var(--ink-faint); background: var(--teal-soft); }
+
+  .add-btn {
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px; font-weight: 600; color: var(--teal);
+    background: var(--teal-soft);
+    border: 1px dashed var(--teal);
+    border-radius: 10px;
+    padding: 13px;
+    margin-top: 4px;
+    cursor: pointer;
+  }
+  .add-btn:active { opacity: 0.8; }
+
+  .empty {
+    text-align: center; padding: 30px 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--ink-faint); font-size: 13px;
+  }
+
+  .footnote {
+    margin-top: 22px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 11.5px; line-height: 1.6; color: var(--ink-faint);
+    border-top: 1px solid var(--line); padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="masthead">
+    <h1>Portofolio saya</h1>
+    <span class="stamp" id="stamp">-</span>
+  </div>
+
+  <div class="totals">
+    <div class="row1">
+      <div>
+        <div class="label">Nilai portofolio</div>
+        <div class="value" id="totalValue">Rp 0</div>
+      </div>
+      <div style="text-align:right">
+        <div class="label">Modal</div>
+        <div class="value" id="totalCost">Rp 0</div>
+      </div>
+    </div>
+    <div>
+      <span class="pl-big" id="totalPL">Rp 0</span><span class="pl-pct" id="totalPct">0%</span>
+    </div>
+    <div class="allocation" id="allocation"></div>
+  </div>
+
+  <div id="sections"></div>
+
+  <button id="installBtn" class="add-btn" type="button" style="display:none;margin-top:12px;">📲 Pasang di Layar HP</button>
+
+  <div class="footnote">
+    Harga/kurs diisi manual — aplikasi ini tidak bisa mengambil harga saham, crypto, SBN, atau emas secara otomatis/realtime (tidak ada akses ke API data pasar). Update kolom harga tiap kali kamu cek di aplikasi sekuritas/exchange/Tresury masing-masing. Semua data tersimpan hanya di HP ini.<br><br>
+    Cara install: tekan tombol "Pasang di Layar HP" jika muncul, atau menu browser (⋮) → "Add to Home Screen".
+  </div>
+
+</div>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'portofolio_multi_v1';
+  var OLD_STORAGE_KEY = 'portofolio_saham_v1';
+
+  var CATEGORIES = {
+    saham: { label: 'Saham (IHSG)', qtyLabel: 'Lot', qtyStep: '1', priceLabel: 'Rp/saham', calcMode: 'perunit', multiplier: 100, namePlaceholder: 'KODE' },
+    crypto: { label: 'Crypto', qtyLabel: 'Jumlah koin', qtyStep: '0.00000001', priceLabel: 'Rp/koin', calcMode: 'perunit', multiplier: 1, namePlaceholder: 'BTC' },
+    sbn: { label: 'SBN', qtyLabel: 'Nominal (Rp)', qtyStep: '1', priceLabel: 'Harga (%)', calcMode: 'percent', multiplier: 1, namePlaceholder: 'ST010' },
+    emas: { label: 'Emas digital', qtyLabel: 'Gram', qtyStep: '0.001', priceLabel: 'Rp/gram', calcMode: 'perunit', multiplier: 1, namePlaceholder: 'Emas Tresury' },
+    reksadana: { label: 'Reksadana', qtyLabel: 'Jumlah unit', qtyStep: '0.0001', priceLabel: 'Rp/unit', calcMode: 'perunit', multiplier: 1, namePlaceholder: 'RD Pasar Uang' }
+  };
+  var CATEGORY_ORDER = ['saham', 'reksadana', 'crypto', 'sbn', 'emas'];
+
+  var defaultHoldings = [
+    { category: 'saham', ticker: 'BBRI', avg: 2777, qty: 0, current: 2777 },
+    { category: 'saham', ticker: 'BUMI', avg: 0, qty: 0, current: 0 },
+    { category: 'saham', ticker: 'MYOR', avg: 0, qty: 0, current: 0 },
+    { category: 'saham', ticker: 'PGAS', avg: 0, qty: 0, current: 0 },
+    { category: 'saham', ticker: 'TLKM', avg: 0, qty: 0, current: 0 },
+    { category: 'saham', ticker: 'ULTJ', avg: 0, qty: 0, current: 0 }
+  ];
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    try {
+      var old = localStorage.getItem(OLD_STORAGE_KEY);
+      if (old) {
+        var oldState = JSON.parse(old);
+        var migrated = (oldState.holdings || []).map(function(h) {
+          return { category: 'saham', ticker: h.ticker, avg: h.avg, qty: h.lots, current: h.current };
+        });
+        return { holdings: migrated };
+      }
+    } catch (e) {}
+    return { holdings: defaultHoldings };
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function fmtRupiah(n) {
+    n = Math.round(n || 0);
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+
+  function fmtPct(n) {
+    n = n || 0;
+    var sign = n > 0 ? '+' : '';
+    return sign + n.toFixed(2) + '%';
+  }
+
+  function calcValue(cat, qty, price) {
+    qty = Number(qty) || 0;
+    price = Number(price) || 0;
+    if (cat.calcMode === 'percent') return qty * (price / 100);
+    return qty * cat.multiplier * price;
+  }
+
+  var state = loadState();
+  var sectionsEl = document.getElementById('sections');
+
+  function render() {
+    sectionsEl.innerHTML = '';
+
+    if (state.holdings.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'Belum ada instrumen. Tambahkan lewat tombol di bawah tiap bagian.';
+      sectionsEl.appendChild(empty);
+    }
+
+    CATEGORY_ORDER.forEach(function(catKey) {
+      var cat = CATEGORIES[catKey];
+      var items = [];
+      state.holdings.forEach(function(h, idx) {
+        if (h.category === catKey) items.push(idx);
+      });
+
+      var sectionHead = document.createElement('div');
+      sectionHead.className = 'section-head';
+      var h2 = document.createElement('h2');
+      h2.textContent = cat.label;
+      var sub = document.createElement('span');
+      sub.className = 'sub';
+      sub.id = 'sub_' + catKey;
+      sectionHead.appendChild(h2);
+      sectionHead.appendChild(sub);
+      sectionsEl.appendChild(sectionHead);
+
+      items.forEach(function(idx) {
+        sectionsEl.appendChild(renderHolding(idx));
+      });
+
+      var addBtn = document.createElement('button');
+      addBtn.className = 'add-btn';
+      addBtn.type = 'button';
+      addBtn.textContent = '+ Tambah ' + cat.label.toLowerCase();
+      addBtn.addEventListener('click', function() {
+        state.holdings.push({ category: catKey, ticker: '', avg: 0, qty: 0, current: 0 });
+        saveState();
+        render();
+      });
+      sectionsEl.appendChild(addBtn);
+    });
+
+    renderTotals();
+    updateStamp();
+  }
+
+  function renderHolding(idx) {
+    var h = state.holdings[idx];
+    var cat = CATEGORIES[h.category] || CATEGORIES.saham;
+
+    var card = document.createElement('div');
+    card.className = 'holding';
+
+    var top = document.createElement('div');
+    top.className = 'holding-top';
+
+    var tickerInput = document.createElement('input');
+    tickerInput.className = 'ticker-input';
+    tickerInput.value = h.ticker;
+    tickerInput.placeholder = cat.namePlaceholder;
+    tickerInput.addEventListener('input', function() {
+      h.ticker = tickerInput.value;
+      saveState();
+    });
+
+    var catSelect = document.createElement('select');
+    catSelect.className = 'cat-select';
+    CATEGORY_ORDER.forEach(function(key) {
+      var opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = CATEGORIES[key].label;
+      if (key === h.category) opt.selected = true;
+      catSelect.appendChild(opt);
+    });
+    catSelect.addEventListener('change', function() {
+      h.category = catSelect.value;
+      saveState();
+      render();
+    });
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.type = 'button';
+    delBtn.textContent = 'Hapus';
+    delBtn.addEventListener('click', function() {
+      state.holdings.splice(idx, 1);
+      saveState();
+      render();
+    });
+
+    top.appendChild(tickerInput);
+    top.appendChild(catSelect);
+    top.appendChild(delBtn);
+
+    var grid = document.createElement('div');
+    grid.className = 'field-grid';
+
+    function makeField(labelText, key, value, step) {
+      var wrap = document.createElement('div');
+      wrap.className = 'field';
+      var lbl = document.createElement('label');
+      lbl.textContent = labelText;
+      var inp = document.createElement('input');
+      inp.type = 'number';
+      inp.inputMode = 'decimal';
+      inp.step = step || '1';
+      inp.value = value || '';
+      inp.placeholder = '0';
+      inp.addEventListener('input', function() {
+        h[key] = inp.value === '' ? 0 : Number(inp.value);
+        saveState();
+        renderTotals();
+        updateRowResult();
+      });
+      wrap.appendChild(lbl);
+      wrap.appendChild(inp);
+      return wrap;
+    }
+
+    grid.appendChild(makeField(cat.calcMode === 'percent' ? 'Nominal (Rp)' : cat.qtyLabel, 'qty', h.qty, cat.qtyStep));
+    grid.appendChild(makeField(cat.calcMode === 'percent' ? 'Beli (%)' : 'Avg (' + cat.priceLabel.split('/')[0] + ')', 'avg', h.avg, '0.01'));
+    grid.appendChild(makeField(cat.calcMode === 'percent' ? 'Skrg (%)' : 'Skrg (' + cat.priceLabel.split('/')[0] + ')', 'current', h.current, '0.01'));
+
+    var result = document.createElement('div');
+    result.className = 'holding-result';
+    var nilai = document.createElement('span');
+    nilai.className = 'nilai';
+    var plSpan = document.createElement('span');
+    plSpan.className = 'pl';
+    result.appendChild(nilai);
+    result.appendChild(plSpan);
+
+    card.appendChild(top);
+    card.appendChild(grid);
+    card.appendChild(result);
+
+    function updateRowResult() {
+      var value = calcValue(cat, h.qty, h.current);
+      var cost = calcValue(cat, h.qty, h.avg);
+      var pl = value - cost;
+      var plPct = cost > 0 ? (pl / cost) * 100 : 0;
+      nilai.textContent = fmtRupiah(value);
+      plSpan.className = 'pl ' + (pl > 0 ? 'gain' : pl < 0 ? 'loss' : 'flat');
+      plSpan.textContent = fmtRupiah(pl) + ' (' + fmtPct(plPct) + ')';
+    }
+    updateRowResult();
+
+    return card;
+  }
+
+  function renderTotals() {
+    var totalValue = 0, totalCost = 0;
+    var catTotals = {};
+    CATEGORY_ORDER.forEach(function(k) { catTotals[k] = { value: 0, cost: 0 }; });
+
+    state.holdings.forEach(function(h) {
+      var cat = CATEGORIES[h.category] || CATEGORIES.saham;
+      var value = calcValue(cat, h.qty, h.current);
+      var cost = calcValue(cat, h.qty, h.avg);
+      totalValue += value;
+      totalCost += cost;
+      if (catTotals[h.category]) {
+        catTotals[h.category].value += value;
+        catTotals[h.category].cost += cost;
+      }
+    });
+
+    var totalPL = totalValue - totalCost;
+    var totalPct = totalCost > 0 ? (totalPL / totalCost) * 100 : 0;
+
+    document.getElementById('totalValue').textContent = fmtRupiah(totalValue);
+    document.getElementById('totalCost').textContent = fmtRupiah(totalCost);
+    var plEl = document.getElementById('totalPL');
+    var pctEl = document.getElementById('totalPct');
+    plEl.textContent = fmtRupiah(totalPL);
+    pctEl.textContent = fmtPct(totalPct);
+    var cls = totalPL > 0 ? 'gain-text' : totalPL < 0 ? 'loss-text' : '';
+    plEl.className = 'pl-big ' + cls;
+    pctEl.className = 'pl-pct ' + cls;
+
+    var allocEl = document.getElementById('allocation');
+    allocEl.innerHTML = '';
+    CATEGORY_ORDER.forEach(function(k) {
+      var ct = catTotals[k];
+      if (ct.value === 0 && ct.cost === 0) return;
+      var pctOfTotal = totalValue > 0 ? (ct.value / totalValue) * 100 : 0;
+      var row = document.createElement('div');
+      row.className = 'alloc-row';
+      var left = document.createElement('span');
+      left.textContent = CATEGORIES[k].label;
+      var right = document.createElement('span');
+      right.textContent = fmtRupiah(ct.value) + ' · ' + pctOfTotal.toFixed(0) + '%';
+      row.appendChild(left);
+      row.appendChild(right);
+      allocEl.appendChild(row);
+
+      var subEl = document.getElementById('sub_' + k);
+      if (subEl) {
+        var subPl = ct.value - ct.cost;
+        subEl.textContent = fmtRupiah(ct.value) + (ct.cost > 0 ? '  ·  ' + fmtPct((subPl / ct.cost) * 100) : '');
+      }
+    });
+  }
+
+  function updateStamp() {
+    var now = new Date();
+    var opts = { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' };
+    document.getElementById('stamp').textContent = now.toLocaleString('id-ID', opts);
+  }
+
+  render();
+
+  var installBtn = document.getElementById('installBtn');
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault(); deferredPrompt = e;
+    if (installBtn) installBtn.style.display = 'block';
+  });
+  if (installBtn) installBtn.addEventListener('click', async function() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    try { await deferredPrompt.userChoice; } catch(e) {}
+    deferredPrompt = null; installBtn.style.display = 'none';
+  });
+})();
+</script>
+</body>
+</html>

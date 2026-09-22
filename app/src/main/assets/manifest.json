@@ -1,0 +1,10 @@
+{
+  "name": "Portofolio Saya",
+  "short_name": "Portofolio",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F1ECDE",
+  "theme_color": "#1F5C55"
+}
